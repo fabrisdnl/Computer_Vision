@@ -1,10 +1,12 @@
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgcodecs.hpp>
 #include <opencv2/core.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 #include <iostream>
 
 using namespace cv;
+using namespace std;
 
 int main(int argc, char** argv)
 {
@@ -15,24 +17,24 @@ int main(int argc, char** argv)
         exit(EXIT_FAILURE);
     }
     /* Reading images */
-    std::string filename = argv[1];
-    std::string imgs_path = samples::findFile(filename);
+    string filename = argv[1];
+    string image_path = "../images/" + filename;
 
-    Mat img_grayscale = imread(imgs_path, IMREAD_GRAYSCALE);
+    Mat img_grayscale = imread(image_path, IMREAD_GRAYSCALE);
     /* Safety check on the image returned by cv::imread() */
     if (img_grayscale.empty())
     {
-        fprintf(stderr, "could not read the image %s\n", imgs_path);
+        cout << "could not read the image" << endl;
         exit(EXIT_FAILURE);
     }
     namedWindow("Grayscale image");
     imshow("Grayscale image", img_grayscale);
 
-    Mat img_color = imread(imgs_path, IMREAD_COLOR);
+    Mat img_color = imread(image_path, IMREAD_COLOR);
     /* Safety check on the image returned by cv::imread() */
     if (img_color.empty())
     {
-        fprintf(stderr, "could not read the image %s\n", imgs_path);
+        cout << "could not read the image" << endl;
         exit(EXIT_FAILURE);
     }
     namedWindow("Colored image");
