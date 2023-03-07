@@ -8,37 +8,75 @@
 using namespace cv;
 using namespace std;
 
+Mat horizontalGradient(int dim)
+{
+    Mat image(dim, dim, CV_8UC1);
+
+    for (int i = 0; i < image.rows; i++)
+    {
+        for (int j = 0; j < image.cols; j++)
+        {
+            image.at<unsigned char>(i,j) = min(j, 255);
+        }
+    }
+
+    return image;
+}
+
+Mat verticalGradient(int dim)
+{
+    Mat image(dim, dim, CV_8UC1);
+
+    for (int i = 0; i < image.rows; i++)
+    {
+        for (int j = 0; j < image.cols; j++)
+        {
+            image.at<unsigned char>(i,j) = min(i, 255);
+        }
+    }
+
+    return image;
+}
+
+Mat chessboard(int dim, int square)
+{
+    Mat image(dim, dim, CV_8UC1);
+
+    for (int i = 0; i < image.rows; i++)
+    {
+        for (int j = 0; j < image.cols; j++)
+        {
+            if (((i / square) % 2 == 0 && (j / square) % 2 == 0)
+                || (((i / square) % 2 == 1 && (j / square) % 2 == 1)))
+            {
+                image.at<unsigned char>(i,j) = 255;
+            }
+            else
+            {
+                image.at<unsigned char>(i,j) = 0;
+            }
+        }
+    }
+
+    return image;
+}
+
+
 int main(int argc, char** argv)
 {
-    /* Safety check on argc */
-    if (argc < 2)
-    {
-        fprintf(stderr, "usage: <image filename>\n");
-        exit(EXIT_FAILURE);
-    }
-    /* Reading images */
-    string filename = argv[1];
-    string image_path = "../images/" + filename;
+    Mat image1 = horizontalGradient(256);
+    namedWindow("Horizontal Gradient");
+    imshow ("Horizontal Gradient", image1);
+    Mat image2 = verticalGradient(256);
+    namedWindow("Vertical Gradient");
+    imshow ("Vertical Gradient", image2);
 
-    Mat img_grayscale = imread(image_path, IMREAD_GRAYSCALE);
-    /* Safety check on the image returned by cv::imread() */
-    if (img_grayscale.empty())
-    {
-        cout << "could not read the image" << endl;
-        exit(EXIT_FAILURE);
-    }
-    namedWindow("Grayscale image");
-    imshow("Grayscale image", img_grayscale);
-
-    Mat img_color = imread(image_path, IMREAD_COLOR);
-    /* Safety check on the image returned by cv::imread() */
-    if (img_color.empty())
-    {
-        cout << "could not read the image" << endl;
-        exit(EXIT_FAILURE);
-    }
-    namedWindow("Colored image");
-    imshow("Colored image", img_color);
+    Mat chess20 = chessboard(300, 20);
+    namedWindow("Chessboard with square of 20 pixels");
+    imshow ("Chessboard with square of 20 pixels", chess20);
+    Mat chess50 = chessboard(300, 50);
+    namedWindow("Chessboard with square of 50 pixels");
+    imshow ("Chessboard with square of 50 pixels", chess50);
 
     waitKey(0);
 
